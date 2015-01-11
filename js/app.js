@@ -52,6 +52,9 @@ $(document).ready(function() {
 
 function newGame() {
 
+    //Re-activate 'Guess' button
+    $("#guessButton").removeAttr('disabled');
+
     //Remove the 'glow' class if added
     if($('.new').hasClass('glow')){
     	$('.new').removeClass('glow');
