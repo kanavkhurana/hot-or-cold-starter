@@ -1,3 +1,5 @@
+/*global $ */ //EDIT: use the global directive to let JsLint know that $ exists already
+//EDIT: check JS Lint errors (ctrl alt j in sublime)
 /*
 Range
 1-10 : burning hot
@@ -7,6 +9,7 @@ Range
 70-90 : cold
 90-100 : ice cold
 */
+"use strict"; //EDIT: http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/ 
 var rangeMap = {
     "1-10": "Burning Hot!",
     "11-20": "Very Hot",
@@ -16,7 +19,8 @@ var rangeMap = {
     "71-90": "Very Cold",
     "91-100": "Ice Cold!",
     "0": "Got it! Please start a New Game!"
-};
+    };
+
 var targetNumber;
 var guessCount = 0;
 
@@ -41,7 +45,7 @@ $(document).ready(function() {
     //$("#guessButton").click(validateAndSubmitGuess);
     $('form').submit(function(event) {
         event.preventDefault();
-        validateAndSubmitGuess();
+        validateAndSubmitGuess($("#userGuess").val());
     });
 
    $('.new').click(newGame);
@@ -66,36 +70,42 @@ function newGame() {
     $("#guessList").html('');
     //Generate random number between 1-100
     targetNumber = generateNumber();
-
+    console.log("Generating new number for a new game. Don't peak!", targetNumber);
     //alert('target number: ' + targetNumber);
-
 }
 
 function generateNumber() {
-    return Math.floor((Math.random() * 100) + 1);
+    return Math.floor((Math.random() * 100) + 1); //EDIT:   Math.floor(Math.random()*(max-min+1)+min); max=100 min=1
 }
 
-function validateAndSubmitGuess() {
+function errorMessage(message) {
+    $('.error').text(message).show();
+    $('#userGuess').val('').focus(function() { $('.error').hide();}); //focus to input and hide error message
+}
+function validateAndSubmitGuess(submittedNumber) {
     //alert('giveFeedback was called!');
-
-    if (!$("#userGuess").val()) {
-
+    console.log("Submitting guess with number = " , submittedNumber); //EDIT: debugging; see console error messages
+    if (!submittedNumber) { 
+        //EDIT: show error message
+        $('.error').text('Please enter a number between 1 and 100!').show();
+        $('#userGuess').val('').focus(function() { $('.error').hide();}); //EDIT: focus to input and hide error message
     }
     //Check if a valid number is entered
-    else if (isNaN($("#userGuess").val())) {
-        alert('Please enter a valid number!');
+    else if (isNaN(submittedNumber)) {
+        errorMessage('Please enter a valid number!'); //EDIT: use function to display error message        
     }
     //Check if the number is not a decimal
-    else if ($("#userGuess").val() % 1 != 0) {
-        alert('Please enter a whole number!');
+    else if (submittedNumber % 1 !== 0) { //EDIT: use !== to compare with 0
+        errorMessage('Please enter a whole number!!'); //EDIT: use function to display error message        
     }
     //Check if number entered is between 1-100
-    else if ($("#userGuess").val() < 0 || $("#userGuess").val() > 100) {
-        alert('Please enter a number between 1-100!');
+    else if (submittedNumber < 0 || submittedNumber > 100) {
+        errorMessage('Please enter a number between 1-100!'); //EDIT: use function to display error message        
     } else {
 
         //Check the range and print the result
-        var difference = $("#userGuess").val() - targetNumber;
+        console.log("Guessing game has started...Guessing: ", submittedNumber);
+        var difference = submittedNumber - targetNumber;
         //Correct guess
         if (difference === 0) {
             $("#feedback").html(rangeMap["0"]);

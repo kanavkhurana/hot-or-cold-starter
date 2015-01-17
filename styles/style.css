@@ -208,6 +208,9 @@ h1 {
 
 }
 
+form {
+	position: relative;
+}
 h2 {
 	margin: 0 auto;	
 	background: #cc324b;
@@ -333,4 +336,16 @@ ul.guessBox li {
 .glow{
 	color: #E5F40E;
 	text-shadow: -1px 1px 8px #ffc, 1px -1px 8px #fff;
+}
+.error {
+	position: absolute;
+	bottom: 77px;
+	right: -229px;
+	color: #fff;
+	background-color: red;
+	width:250px;
+	display: none;
+	transition: all 0.3s ease;		
+	padding: 10px;
+	border-radius: 5px;
 }
